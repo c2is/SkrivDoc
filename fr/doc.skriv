@@ -1,0 +1,44 @@
+(from Wikipedia's article about [[History of computing hardware|http://en.wikipedia.org/wiki/History_of_computing_hardware]])
+
+------
+
+= History of computing hardware
+
+== Earliest true hardware
+
+The [[abacus|http://en.wikipedia.org/wiki/Abacus]] was early used for arithmetic tasks. What we now call the [[Roman abacus|http://en.wikipedia.org/wiki/Roman_abacus]] was used in [[Babylonia|http://en.wikipedia.org/wiki/Babylonia]] as early as 2400 BC.
+
+{{http://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Abacus_6.png/220px-Abacus_6.png}}
+
+Several [[analog computers|http://en.wikipedia.org/wiki/Analog_computer]] were constructed in ancient and medieval times to perform astronomical calculations. These include the [[Antikythera mechanism|http://en.wikipedia.org/wiki/Antikythera_mechanism]] and the [[astrolabe|http://en.wikipedia.org/wiki/Astrolabe]] from [[ancient Greece|http://en.wikipedia.org/wiki/Ancient_Greece]] (c. 150â€“100 BC), which are generally regarded as the earliest known mechanical analog computers.((Lazos 1994, The Antikythera Computer))
+
+In Japan, [[RyÅichi Yazu|http://en.wikipedia.org/wiki/Ry%C5%8Dichi_Yazu]] patented a mechanical calculator called the Yazu Arithmometer in 1903. It consisted of a single cylinder and 22 gears, and employed the mixed base-2 and base-5 number system familiar to users to the [[soroban|http://en.wikipedia.org/wiki/Soroban]] (Japanese abacus).
+
+
+== 1801: punched card technology
+
+=== Joseph-Marie Jacquard
+* In 1801, [[Joseph-Marie Jacquard|http://en.wikipedia.org/wiki/Joseph_Marie_Jacquard]] developed a loom in which the pattern being woven was controlled by [[punched cards|http://en.wikipedia.org/wiki/Punched_cards]].
+
+=== Charles Babbage
+* In 1833, [[Charles Babbage|http://en.wikipedia.org/wiki/Charles_Babbage]] moved on from developing his [[difference engine|http://en.wikipedia.org/wiki/Difference_engine]] (for navigational calculations) to a general purpose design, the Analytical Engine, which drew directly on Jacquard's punched cards for its program storage.((Jones, Douglas W, The University of Iowa))
+* In 1837, Babbage described his [[analytical engine|http://en.wikipedia.org/wiki/Analytical_engine]]. It was a general-purpose programmable computer, employing punch cards for input and a steam engine for power, using the positions of gears and shafts to represent numbers.(([[John Markoff (7 November 2011) "It started digital wheels turning"|http://www.nytimes.com/2011/11/08/science/computer-experts-building-1830s-babbage-analytical-engine.html?hpw]] New York Times description of Babbage's Analytical Engine))
+
+
+== Early computer characteristics
+
+!! Name          !! Country !! Date     !! System        !! Mechanism
+|| Zuse Z3       || Ger.    || May 1941 || Bin. float pt || Electro-mech
+|| Colossus Mk 1 || UK      || Feb 1944 || Binary        || Electronic
+|| ENIAC         || US      || Jul 1946 || Decimal       || Electronic
+
+{{http://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Von_Neumann_architecture.svg/220px-Von_Neumann_architecture.svg.png}}
+
+
+== See also
+
+* [[History of computing|http://en.wikipedia.org/wiki/History_of_computing]]
+* [[Information Age|http://en.wikipedia.org/wiki/Information_Age]]
+* [[IT History Society|http://en.wikipedia.org/wiki/IT_History_Society]]
+* [[The Secret Guide to Computers|http://en.wikipedia.org/wiki/The_Secret_Guide_to_Computers]]
+* [[Timeline of computing|http://en.wikipedia.org/wiki/Timeline_of_computing]]
