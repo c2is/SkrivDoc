@@ -24,6 +24,7 @@ switch($_POST["action"]) {
     case "push":
         $skriv = file_get_contents("../".$language."/doc.skriv");
         $cmd = array();
+        $cmd[] = "git checkout master";
         $cmd[] = "git add ../.";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin master";
