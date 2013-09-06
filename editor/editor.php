@@ -10,8 +10,10 @@ switch($_POST["action"]) {
         echo $renderer->render($_POST["text"]);
         break;
     case "shutdown":
-        $pid = shell_exec("ps ax | grep 'php -S localhost:8096' | grep -v grep | cut -d' ' -f1");
-        shell_exec("kill ".$pid);
+        $pid = shell_exec("ps ax | grep 'php -S localhost:8096' | grep -v grep");
+        $pid = trim($pid);
+        $pid = explode(" ",$pid);
+        shell_exec("kill ".$pid[0]);
         break;
     case "setlg":
         $_SESSION["language"] = $_POST["language"];
