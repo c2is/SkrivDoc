@@ -30,8 +30,8 @@ switch($_POST["action"]) {
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin gh-pages";
         $cmd[] = "git checkout master";
-        shell_exec(implode(";",$cmd));
-        echo "Html pushed to Github pages";
+        $res = shell_exec(implode(";",$cmd));
+        echo "Html pushed to Github pages ".$res;
         break;
     case "build":
         $tpl = file_get_contents("../html/".$_SESSION["language"]."/tpl.htm");
