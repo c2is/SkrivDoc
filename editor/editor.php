@@ -22,17 +22,18 @@ switch($_POST["action"]) {
         echo "Content saved into directory ".$_SESSION["language"]."/";
         break;
     case "push":
-        $cmd[] = "git add . >>/tmp/bfdoc.log";
-        $cmd[] = "git commit -m'Auto commit from doc editor' >>/tmp/bfdoc.log";
-        $cmd[] = "git push origin master >>/tmp/bfdoc.log";
-        $cmd[] = "git checkout gh-pages >>/tmp/bfdoc.log";
-        $cmd[] = "git add html/. >>/tmp/bfdoc.log";
-        $cmd[] = "git commit -m'Auto commit from doc editor' >>/tmp/bfdoc.log";
-        $cmd[] = "git push origin gh-pages >>/tmp/bfdoc.log";
-        $cmd[] = "git checkout master >>/tmp/bfdoc.log";
-        $res = shell_exec(implode(";",$cmd));
-        echo "Html pushed to Github pages ".$res;
-        file_put_contents("/tmp/bfdoc.log",$res,FILE_APPEND);
+
+        $res[] = shell_exec("git add .");
+        $res[] = shell_exec("git commit -m'Auto commit from doc editor'");
+        $res[] = shell_exec("git push origin master ");
+        $res[] = shell_exec("git checkout gh-pages");
+        $res[] = shell_exec("git add html/. ");
+        $res[] = shell_exec("git commit -m'Auto commit from doc editor'");
+        $res[] = shell_exec("git push origin gh-pages");
+        $res[] = shell_exec("git checkout master");
+
+        echo "Html pushed to Github pages ";
+        file_put_contents("/tmp/bfdoc.log",implode("\n\n---",$res,FILE_APPEND));
         break;
     case "build":
         $tpl = file_get_contents("../html/".$_SESSION["language"]."/tpl.htm");
