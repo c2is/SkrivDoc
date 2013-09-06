@@ -31,16 +31,14 @@ switch($_POST["action"]) {
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin master";
         $cmd[] = "git checkout gh-pages";
-        $skriv = file_get_contents("../".$_SESSION["language"]."/doc.skriv");
+        $html = file_get_contents("../html/".$_SESSION["language"]."/index.html");
 
         $res = shell_exec(implode(";",$cmd));
 
-        file_put_contents("../".$_SESSION["language"]."/doc.skriv",$skriv);
+        file_put_contents("../html/".$_SESSION["language"]."/index.html",$html);
         build($renderer,$_SESSION["language"]);
         $cmd = array();
         $cmd[] = "git add ../html/. ";
-        $cmd[] = "git add ../fr/. ";
-        $cmd[] = "git add ../en/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin gh-pages";
         $cmd[] = "git checkout master";
