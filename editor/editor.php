@@ -23,12 +23,11 @@ switch($_POST["action"]) {
         break;
     case "push":
         $cmd = array();
-        $cmd[] = "git add .";
+        $cmd[] = "git add html/.";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
-        $cmd[] = "git push origin master ";
-        $cmd[] = "git checkout gh-pages";
+        $cmd[] = "git push origin gh-pages ";
         $res = shell_exec(implode(";",$cmd));
-        
+
         file_put_contents("/tmp/bfdoc.log",$res."--\n\n--".$res1,FILE_APPEND);
         echo "Html pushed to Github pages ";
         break;
