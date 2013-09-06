@@ -18,7 +18,7 @@ switch($_POST["action"]) {
         echo "Setted language in ".$_SESSION["language"];
         break;
     case "save":
-        file_put_contents("../".$_SESSION["language"]."/doc.skriv",$_POST["text"]);
+        file_put_contents("../".$_SESSION["language"]."/doc.skriv", $_POST["text"]);
         echo "Content saved into directory ".$_SESSION["language"]."/";
         break;
     case "push":
@@ -33,7 +33,7 @@ switch($_POST["action"]) {
 
         $res = shell_exec(implode(";",$cmd));
 
-        file_put_contents("../".$_SESSION["language"]."/doc.skriv",$skriv);
+        file_put_contents("../".$_SESSION["language"]."/doc.skriv", $skriv);
         build($renderer,$_SESSION["language"]);
         $cmd = array();
         $cmd[] = "git add ../html/. ";
@@ -42,7 +42,7 @@ switch($_POST["action"]) {
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin gh-pages";
         $cmd[] = "git checkout master";
-        $res1 = shell_exec(implode(";",$cmd));
+        $res1 = shell_exec(implode(";", $cmd));
         echo "Html pushed to Github pages ";
         break;
     case "build":
@@ -53,8 +53,8 @@ switch($_POST["action"]) {
 
 function build($renderer,$language) {
     $tpl = file_get_contents("../html/".$language."/tpl.htm");
-    $tpl = str_replace("#{doc}#",$renderer->render(file_get_contents("../".$language."/doc.skriv")),$tpl);
-    $tpl = str_replace("#{toc}#",$renderer->getToc(),$tpl);
-    file_put_contents("../html/".$language."/index.html",$tpl);
+    $tpl = str_replace("#{doc}#",$renderer->render(file_get_contents("../".$language."/doc.skriv")), $tpl);
+    $tpl = str_replace("#{toc}#",$renderer->getToc(), $tpl);
+    file_put_contents("../html/".$language."/index.html", $tpl);
 }
 
