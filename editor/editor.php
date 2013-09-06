@@ -21,6 +21,14 @@ switch($_POST["action"]) {
         file_put_contents("../".$_SESSION["language"]."/doc.skriv",$_POST["text"]);
         echo "Content saved into directory ".$_SESSION["language"]."/";
         break;
+    case "push":
+        $cmd[] = "git checkout gh-pages";
+        $cmd[] = "git add html/.";
+        $cmd[] = "git commit -m'Auto commit from doc editor'";
+        $cmd[] = "git push origin gh-pages";
+        shell_exec(implode(";",$cmd));
+        echo "Html pushed to Github pages";
+        break;
     case "build":
         $tpl = file_get_contents("../html/".$_SESSION["language"]."/tpl.htm");
         $tpl = str_replace("#{doc}#",$renderer->render(file_get_contents("../".$_SESSION["language"]."/doc.skriv")),$tpl);
