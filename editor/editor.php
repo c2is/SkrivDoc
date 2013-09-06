@@ -22,14 +22,14 @@ switch($_POST["action"]) {
         echo "Content saved into directory ".$_SESSION["language"]."/";
         break;
     case "push":
-        $skriv = file_get_contents("../".$language."/doc.skriv");
+        $skriv = file_get_contents("../".$_SESSION["language"]."/doc.skriv");
         $cmd = array();
         $cmd[] = "git checkout master";
         $cmd[] = "git add ../.";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin master";
         $cmd[] = "git checkout gh-pages";
-        file_put_contents("../".$language."/doc.skriv",$skriv);
+        file_put_contents("../".$_SESSION["language"]."/doc.skriv",$skriv);
         $res = shell_exec(implode(";",$cmd));
         build($renderer,$_SESSION["language"]);
         $cmd = array();
