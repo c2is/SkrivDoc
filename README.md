@@ -8,6 +8,13 @@ In this repository you get an skriv editor which allow you to :
 - automatically update the Github pages websites by commiting and pushing html exports in the gh-pages branch.
 
 ## Usage for team which writes grants
-Clone this repository
-````
-git clone 
+Clone this repository and go
+```
+git clone git@github.com:c2is/BigfootDoc.git
+cd BigfootDoc
+```
+
+Start the editor
+```
+./edit
+```
