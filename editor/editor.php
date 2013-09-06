@@ -22,18 +22,20 @@ switch($_POST["action"]) {
         echo "Content saved into directory ".$_SESSION["language"]."/";
         break;
     case "push":
-
+        $cmd = array();
         $cmd[] = "git add .";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin master ";
+        $res = shell_exec(implode(";",$cmd));
+        $cmd = array();
         $cmd[] = "git checkout gh-pages";
         $cmd[] = "git add html/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin gh-pages";
         $cmd[] = "git checkout master";
 
-        shell_exec(implode(";",$cmd));
-
+        $res1 = shell_exec(implode(";",$cmd));
+        file_put_contents("/tmp/bfdoc.log",$res.$res1,FILE_APPEND);
         echo "Html pushed to Github pages ";
         break;
     case "build":
