@@ -28,14 +28,7 @@ switch($_POST["action"]) {
         $cmd[] = "git push origin master ";
         $cmd[] = "git checkout gh-pages";
         $res = shell_exec(implode(";",$cmd));
-        build($renderer,$_SESSION["language"]);
-        $cmd = array();
-        $cmd[] = "git add html/. ";
-        $cmd[] = "git commit -m'Auto commit from doc editor'";
-        $cmd[] = "git push origin gh-pages";
-        $cmd[] = "git checkout master";
-
-        $res1 = shell_exec(implode(";",$cmd));
+        
         file_put_contents("/tmp/bfdoc.log",$res."--\n\n--".$res1,FILE_APPEND);
         echo "Html pushed to Github pages ";
         break;
