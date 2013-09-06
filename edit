@@ -5,7 +5,7 @@ if [ "$(uname)" == 'Darwin' ]
   then
 	open http://localhost:8096/editor/;
   else
-	x-www-browser http://localhost:8096/editor/;
+	x-www-browser http://localhost:8096/editor/ &
 fi
 php -S localhost:8096 > /dev/null 2>&1 &
 exit 1;
