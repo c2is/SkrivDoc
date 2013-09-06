@@ -8,10 +8,12 @@ In this repository you get a light skriv editor which allow you to :
 - automatically update the Github pages websites by commiting and pushing html exports in the gh-pages branch.
 
 ## Usage for team with writes grants
-Clone this repository and go
+Clone this repository, go inside, install composer and execute the install
 ```
 git clone git@github.com:c2is/BigfootDoc.git
 cd BigfootDoc
+curl -sS https://getcomposer.org/installer | php
+php ./composer.phar install
 ```
 
 Start the editor
