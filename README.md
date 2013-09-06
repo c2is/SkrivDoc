@@ -7,3 +7,7 @@ In this repository you get an skriv editor which allow you to :
 - automatically commit and push the .skriv modified,
 - automatically update the Github pages websites by commiting and pushing html exports in the gh-pages branch.
 
+## Usage for team which writes grants
+Clone this repository
+````
+git clone 
