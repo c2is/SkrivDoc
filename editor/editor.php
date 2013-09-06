@@ -26,6 +26,7 @@ switch($_POST["action"]) {
         $cmd[] = "git add html/.";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin gh-pages";
+        $cmd[] = "git checkout master";
         shell_exec(implode(";",$cmd));
         echo "Html pushed to Github pages";
         break;
