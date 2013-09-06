@@ -1,5 +1,6 @@
 <?php
 session_start();
+$welcomeJs = "alert(\"It's strongly recommanded to update your repository before editing doc, please do a git pull\");";
 if (! isset($_SESSION["language"])) {
     $_SESSION["language"] = "en";
 }
@@ -134,6 +135,8 @@ $ajaxUrl = "./editor.php";
             }
     )
     $(document).ready(function() {
+        <?php echo $welcomeJs; ?>
+
         $("#<?php echo $_SESSION["language"]?>").css("color", "red");
         $("#<?php echo $_SESSION["language"]?>").css("cursor", "auto");
 
