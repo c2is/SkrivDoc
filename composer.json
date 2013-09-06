@@ -1,7 +1,0 @@
-{
-    "require": {
-        "amaury/wikirenderer": "dev-master",
-        "amaury/skrivmarkup": "dev-master",
-	"easybook/geshi": "dev-master"
-    }
-}
