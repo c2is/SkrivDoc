@@ -28,6 +28,7 @@ switch($_POST["action"]) {
         $cmd[] = "git push origin master ";
         $cmd[] = "git checkout gh-pages";
         $res = shell_exec(implode(";",$cmd));
+        build($renderer,$_SESSION["language"]);
         $cmd = array();
         $cmd[] = "git add html/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
@@ -39,12 +40,15 @@ switch($_POST["action"]) {
         echo "Html pushed to Github pages ";
         break;
     case "build":
-        $tpl = file_get_contents("../html/".$_SESSION["language"]."/tpl.htm");
-        $tpl = str_replace("#{doc}#",$renderer->render(file_get_contents("../".$_SESSION["language"]."/doc.skriv")),$tpl);
-        $tpl = str_replace("#{toc}#",$renderer->getToc(),$tpl);
-        file_put_contents("../html/".$_SESSION["language"]."/index.html",$tpl);
+        build($renderer,$_SESSION["language"]);
         echo "Files generated into directory html/".$_SESSION["language"]."/";
         break;
 }
 
+function build($renderer,$language) {
+    $tpl = file_get_contents("../html/".$language."/tpl.htm");
+    $tpl = str_replace("#{doc}#",$renderer->render(file_get_contents("../".$language."/doc.skriv")),$tpl);
+    $tpl = str_replace("#{toc}#",$renderer->getToc(),$tpl);
+    file_put_contents("../html/".$language."/index.html",$tpl);
+}
 
