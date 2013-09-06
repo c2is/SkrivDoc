@@ -106,7 +106,7 @@ $ajaxUrl = "./editor.php";
             <ul class="nav">
                 <li id="lang"><div id="en">EN</div>|<div id="fr">FR</div></li>
                 <li><a href="#_" onclick="build();">Build Html</a></li>
-                <li><a href="#_" onclick="push();">Push html</a></li>
+                <li><a href="#_" onclick="push();">Commit and push</a></li>
                 <li><a href="http://markup.skriv.org/language/syntax" target="_blank">Srkiv doc</a></li>
                 <li><div id="ajaxMsg"></div></li>
             </ul>
