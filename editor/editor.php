@@ -33,7 +33,7 @@ switch($_POST["action"]) {
         $res[] = shell_exec("git checkout master");
 
         echo "Html pushed to Github pages ";
-        file_put_contents("/tmp/bfdoc.log",implode("\n\n---",$res,FILE_APPEND));
+        file_put_contents("/tmp/bfdoc.log",implode("\n\n---",$res),FILE_APPEND);
         break;
     case "build":
         $tpl = file_get_contents("../html/".$_SESSION["language"]."/tpl.htm");
