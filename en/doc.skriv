@@ -10,6 +10,7 @@ How to use our framework to build easily a website
 * The routing isn't generated! You need to add the newly created Controller in your relevent routing configuration file(s) (usually will be app/config/routing_admin.yml)
 * The menu isn't generated (yet?)! Your form and controller are generated and you edited your routing configuration and it all works if you type in the URL directly. But you need to add a menu to your CRUD screens to the Bigfoot administration interface menu.
 
+
 ==== Adding a menu in Bigfoot
 Menu items in Bigfoot are added by Listeners. It allows any Bundle to register its own menu items  that will aggregate with other items added by other bundles.
 * Create a Listener :
