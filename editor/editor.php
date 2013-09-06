@@ -37,6 +37,8 @@ switch($_POST["action"]) {
         build($renderer,$_SESSION["language"]);
         $cmd = array();
         $cmd[] = "git add ../html/. ";
+        $cmd[] = "git add ../fr/. ";
+        $cmd[] = "git add ../en/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin gh-pages";
         $cmd[] = "git checkout master";
