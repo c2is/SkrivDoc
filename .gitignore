@@ -2,3 +2,5 @@
 .DS_Store
 composer.lock
 vendor/
+html/fr/index.html
+html/en/index.html
