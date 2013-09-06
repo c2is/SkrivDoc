@@ -26,7 +26,7 @@ switch($_POST["action"]) {
         $cmd = array();
         $cmd[] = "git add ../.";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
-        $cmd[] = "git push origin master ";
+        $cmd[] = "git push origin master";
         $cmd[] = "git checkout gh-pages";
         $res = shell_exec(implode(";",$cmd));
         build($renderer,$_SESSION["language"]);
