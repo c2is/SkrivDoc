@@ -24,6 +24,7 @@ switch($_POST["action"]) {
     case "push":
         $cmd[] = "git add .";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
+        $cmd[] = "git push origin master";
         $cmd[] = "git checkout gh-pages";
         $cmd[] = "git add html/.";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
