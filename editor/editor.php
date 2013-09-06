@@ -38,6 +38,7 @@ switch($_POST["action"]) {
         file_put_contents("../html/".$_SESSION["language"]."/index.html",$html);
 
         $cmd = array();
+        $cmd[] = "git pull";
         $cmd[] = "git add ../html/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin gh-pages";
