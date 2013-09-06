@@ -43,7 +43,13 @@ switch($_POST["action"]) {
         $cmd[] = "git push origin gh-pages";
         $cmd[] = "git checkout master";
         $res1 = shell_exec(implode(";",$cmd));
-        echo "Html pushed to Github pages ";
+        if (preg_match("`(rejected|conflict)`i",$res1)) {
+            $output = "Some problems appear : maybe conflict or fast forward, inspect your branches master and gh-pages with git";
+        }
+        else {
+            $output = "Html pushed to Github pages ";
+        }
+        echo $output;
         break;
     case "build":
         build($renderer,$_SESSION["language"]);
