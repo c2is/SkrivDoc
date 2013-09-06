@@ -7,7 +7,7 @@ In this repository you get a light skriv editor which allow you to :
 - automatically commit and push the .skriv modified,
 - automatically update the Github pages websites by commiting and pushing html exports in the gh-pages branch.
 
-## Usage for team which writes grants
+## Usage for team with writes grants
 Clone this repository and go
 ```
 git clone git@github.com:c2is/BigfootDoc.git
