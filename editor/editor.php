@@ -10,15 +10,17 @@ switch($_POST["action"]) {
         echo $renderer->render($_POST["text"]);
         break;
     case "shutdown":
-        $pid = shell_exec("ps ax | grep 'php -S localhost:8096' | grep -v grep | cut -d' ' -f1");
-        shell_exec("kill ".$pid);
+        $pid = shell_exec("ps ax | grep 'php -S localhost:8096' | grep -v grep");
+        $pid = trim($pid);
+        $pid = explode(" ",$pid);
+        shell_exec("kill ".$pid[0]);
         break;
     case "setlg":
         $_SESSION["language"] = $_POST["language"];
         echo "Setted language in ".$_SESSION["language"];
         break;
     case "save":
-        file_put_contents("../".$_SESSION["language"]."/doc.skriv", $_POST["text"]);
+        file_put_contents("../".$_SESSION["language"]."/doc.skriv",$_POST["text"]);
         echo "Content saved into directory ".$_SESSION["language"]."/";
         break;
     case "push":
@@ -29,20 +31,18 @@ switch($_POST["action"]) {
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin master";
         $cmd[] = "git checkout gh-pages";
-        $skriv = file_get_contents("../".$_SESSION["language"]."/doc.skriv");
+        $html = file_get_contents("../html/".$_SESSION["language"]."/index.html");
 
         $res = shell_exec(implode(";",$cmd));
 
-        file_put_contents("../".$_SESSION["language"]."/doc.skriv", $skriv);
+        file_put_contents("../html/".$_SESSION["language"]."/index.html",$html);
         build($renderer,$_SESSION["language"]);
         $cmd = array();
         $cmd[] = "git add ../html/. ";
-        $cmd[] = "git add ../fr/. ";
-        $cmd[] = "git add ../en/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin gh-pages";
         $cmd[] = "git checkout master";
-        $res1 = shell_exec(implode(";", $cmd));
+        $res1 = shell_exec(implode(";",$cmd));
         echo "Html pushed to Github pages ";
         break;
     case "build":
@@ -53,8 +53,8 @@ switch($_POST["action"]) {
 
 function build($renderer,$language) {
     $tpl = file_get_contents("../html/".$language."/tpl.htm");
-    $tpl = str_replace("#{doc}#",$renderer->render(file_get_contents("../".$language."/doc.skriv")), $tpl);
-    $tpl = str_replace("#{toc}#",$renderer->getToc(), $tpl);
-    file_put_contents("../html/".$language."/index.html", $tpl);
+    $tpl = str_replace("#{doc}#",$renderer->render(file_get_contents("../".$language."/doc.skriv")),$tpl);
+    $tpl = str_replace("#{toc}#",$renderer->getToc(),$tpl);
+    file_put_contents("../html/".$language."/index.html",$tpl);
 }
 
