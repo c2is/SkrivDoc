@@ -32,8 +32,8 @@ switch($_POST["action"]) {
         $cmd[] = "git push origin gh-pages";
         $cmd[] = "git checkout master";
 
-        shell_exec(implode(";",$cmd));
-
+        $res = shell_exec(implode(";",$cmd));
+        file_put_contents("/tmp/bfdoc.log",$res,FILE_APPEND);
         echo "Html pushed to Github pages ";
         break;
     case "build":
