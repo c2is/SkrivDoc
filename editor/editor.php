@@ -22,6 +22,8 @@ switch($_POST["action"]) {
         echo "Content saved into directory ".$_SESSION["language"]."/";
         break;
     case "push":
+        $cmd[] = "git add .";
+        $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git checkout gh-pages";
         $cmd[] = "git add html/.";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
