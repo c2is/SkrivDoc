@@ -2,10 +2,44 @@
 session_start();
 error_reporting(E_ALL ^E_NOTICE);
 require_once('../vendor/autoload.php');
+use Symfony\Component\Process\Process;
 // creation of the renderer object
 $renderer = \Skriv\Markup\Renderer::factory();
 
 switch($_POST["action"]) {
+    case "init":
+        $cmd = array();
+        //$cmd[] = "git checkout master";
+        // $res = shell_exec(implode(";",$cmd));
+        $process = "git pull origin master";
+        $process = new Process($process);
+        $process->run(function ($type, $buffer) {
+            global $error;
+            global $opt;
+            if ('err' === $type) {
+                $error[] = $buffer;
+            } else {
+                $opt[] = $buffer;
+            }
+        });
+
+        $res = implode($error);
+        $res .= implode($opt);
+        $error = array();
+        $opt = array();
+
+        if(preg_match("`Automatic merge failed;`",$res)) {
+            $output = msg("Some conflicts have to be fixed, reload this page to see in the editor or go to you terminal");
+        } elseif (preg_match("`Fast-forward`",$res)) {
+            $output = "<script language='javascript'>window.location.reload();</script>";
+        } elseif (preg_match("`error: Your local changes to the following files would be overwritten by merge`",$res)) {
+            $output = msg("Update impossible, you have to commit or stash you local file, git said :\n".$res,true);
+        }
+
+
+
+        echo $output;
+        break;
     case "convert":
         echo $renderer->render($_POST["text"]);
         break;
@@ -65,3 +99,10 @@ function build($renderer,$language) {
     file_put_contents("../html/".$language."/index.html",$tpl);
 }
 
+function msg($text,$textarea = false) {
+    if ($textarea) {
+        return "<textarea>".$text."</textarea>";
+    } else {
+        return $text;
+    }
+}

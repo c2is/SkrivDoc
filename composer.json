@@ -2,6 +2,7 @@
     "require": {
         "amaury/wikirenderer": "dev-master",
         "amaury/skrivmarkup": "dev-master",
-	"easybook/geshi": "dev-master"
+	    "easybook/geshi": "dev-master",
+        "symfony/process": "2.2.*"
     }
 }

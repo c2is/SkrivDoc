@@ -1,6 +1,6 @@
 <?php
 session_start();
-$welcomeJs = "alert(\"It's strongly recommanded to update your repository before editing doc, please do a git pull\");";
+
 if (! isset($_SESSION["language"])) {
     $_SESSION["language"] = "en";
 }
@@ -83,12 +83,22 @@ $ajaxUrl = "./editor.php";
             margin: 0;
             font-size: 0.9em;
         }
-        div#ajaxMsg {
+        div#ajaxMsg
+        {
             display:block;
             float: none;
             padding: 10px 15px 10px;
             color: #AD2929;
             text-decoration: none;
+            height:30px;
+            width:600px;
+        }
+        div#ajaxMsg textarea
+        {
+            color: #AD2929;
+            text-decoration: none;
+            height:20px;
+            width:600px;
         }
         li#lang div{
             display:inline;
@@ -122,12 +132,7 @@ $ajaxUrl = "./editor.php";
 </div>
 
 <script type="text/javascript"><!--
-    function build(){
-        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'build'});
-    }
-    function push(){
-        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'push'});
-    }
+
     $(window).bind(
             "beforeunload",
             function() {
@@ -135,10 +140,11 @@ $ajaxUrl = "./editor.php";
             }
     )
     $(document).ready(function() {
-        <?php echo $welcomeJs; ?>
 
         $("#<?php echo $_SESSION["language"]?>").css("color", "red");
         $("#<?php echo $_SESSION["language"]?>").css("cursor", "auto");
+
+        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'init'});
 
         var text = $("#skrivtext").val();
         $("#skrivhtml").load('<?php echo $ajaxUrl;?>', {action: 'convert',text: text});
@@ -171,6 +177,13 @@ $ajaxUrl = "./editor.php";
             $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'save',text: text});
         }, 300);
     });
+
+    function build(){
+        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'build'});
+    }
+    function push(){
+        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'push'});
+    }
 //--></script>
 
 
