@@ -13,8 +13,20 @@
 .main aside {
     border-top: 20px solid #e8443b;
     border-bottom: 20px solid #e8443b;
-}
+    padding:10px 20px;
+    margin-top:20px;
+    width:300px;
 
+}
+.main article {
+    float: none;
+    width: auto;
+    margin-right:380px;
+}
+.main {
+    width:auto;
+    padding:0 20px;
+}
 .header-container,
 .footer-container,
 .main aside {
