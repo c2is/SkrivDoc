@@ -41,7 +41,7 @@ switch($_POST["action"]) {
         $res = shell_exec(implode(";",$cmd));
 
         file_put_contents("../html/".$_SESSION["language"]."/index.html",$html);
-
+        die();
         $cmd = array();
         $cmd[] = "git add ../html/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
