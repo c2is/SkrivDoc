@@ -7,7 +7,7 @@ How to use our framework to build easily a website testa
 ------
 
 
-==== Generating CRUD in Bigfoot
+==== Generating CRUD in Bigfoothh
 * Have an existing doctrine entity (in the Entity/ folder in a Bundle) by creating it yourself or using the generate:doctrine:entity command
 * use generate:bigfoot:crud. It works exactly like doctrine:generate:crud (It actually extends that command and uses its own templates to generate files)
 * A controller extending Bigfoot\Bundle\CoreBundle\Crud\CrudController will be generated in the Controller/ folder of your bundle. A FormType for your entity will also be generated if not existing.
