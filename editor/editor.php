@@ -1,4 +1,7 @@
 <?php
+/*
+ * Ajax handler
+ */
 session_start();
 error_reporting(E_ALL ^E_NOTICE);
 require_once('../vendor/autoload.php');
@@ -14,20 +17,20 @@ switch($_POST["action"]) {
          * Deal with git errors
          */
         if ($pullStatus < 1) {
-            $output = msg($gHdl->shortMessage,true);
+            $output = msg($gHdl->shortMessage, true);
         }
         echo $output;
 
         break;
     case "push":
-        build($renderer,$_SESSION["language"]);
+        build($renderer, $_SESSION["language"]);
         $gHdl = new gitHandler();
         $pullStatus = $gHdl->getPullStatus();
         /*
          * Deal with git errors
          */
         if ($pullStatus < 1) {
-            $output = msg($gHdl->shortMessage,true);
+            $output = msg($gHdl->shortMessage, true);
             echo $output;
             die();
         }
@@ -38,15 +41,15 @@ switch($_POST["action"]) {
         $cmd[] = "git checkout gh-pages";
         $html = file_get_contents("../html/".$_SESSION["language"]."/index.html");
 
-        $res = shell_exec(implode(";",$cmd));
+        $res = shell_exec(implode(";", $cmd));
 
-        file_put_contents("../html/".$_SESSION["language"]."/index.html",$html);
+        file_put_contents("../html/".$_SESSION["language"]."/index.html", $html);
         $cmd = array();
         $cmd[] = "git add ../html/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push --force origin gh-pages";
         $cmd[] = "git checkout master";
-        $status = shell_exec(implode(";",$cmd));
+        $status = shell_exec(implode(";", $cmd));
         echo "Html pushed to Github pages ";
         break;
     case "convert":
@@ -55,7 +58,7 @@ switch($_POST["action"]) {
     case "shutdown":
         $pid = shell_exec("ps ax | grep 'php -S localhost:8096' | grep -v grep");
         $pid = trim($pid);
-        $pid = explode(" ",$pid);
+        $pid = explode(" ", $pid);
         shell_exec("kill ".$pid[0]);
         break;
     case "setlg":
@@ -63,23 +66,25 @@ switch($_POST["action"]) {
         echo "Setted language in ".$_SESSION["language"];
         break;
     case "save":
-        file_put_contents("../".$_SESSION["language"]."/doc.skriv",$_POST["text"]);
+        file_put_contents("../".$_SESSION["language"]."/doc.skriv", $_POST["text"]);
         echo "Content saved into directory ".$_SESSION["language"]."/";
         break;
     case "build":
-        build($renderer,$_SESSION["language"]);
+        build($renderer, $_SESSION["language"]);
         echo "Files generated into directory html/".$_SESSION["language"]."/";
         break;
 }
 
-function build($renderer,$language) {
+function build($renderer,$language)
+{
     $tpl = file_get_contents("../html/".$language."/tpl.htm");
-    $tpl = str_replace("#{doc}#",$renderer->render(file_get_contents("../".$language."/doc.skriv")),$tpl);
-    $tpl = str_replace("#{toc}#",$renderer->getToc(),$tpl);
-    file_put_contents("../html/".$language."/index.html",$tpl);
+    $tpl = str_replace("#{doc}#", $renderer->render(file_get_contents("../".$language."/doc.skriv")), $tpl);
+    $tpl = str_replace("#{toc}#", $renderer->getToc(), $tpl);
+    file_put_contents("../html/".$language."/index.html", $tpl);
 }
 
-function msg($text,$textarea = false) {
+function msg($text,$textarea = false)
+{
     if ($textarea) {
         return "<textarea>".$text."</textarea>";
     } else {
@@ -97,7 +102,8 @@ class gitHandler
     public $opt;
     public $shortMessage;
 
-    public function getPullStatus ($branch = "master") {
+    public function getPullStatus ($branch = "master")
+    {
         $status = 1;
 
         shell_exec("git checkout master");
@@ -114,14 +120,14 @@ class gitHandler
         /*
          * Deal with git errors
          */
-        if ($this->in_array_match("`Your local changes to the following files would be overwritten by merge`",$this->error)) {
-            $this->shortMessage = "Update impossible, you have to commit or stash you local file, git said:\n".implode("",$this->error);
+        if ($this->in_array_match("`Your local changes to the following files would be overwritten by merge`", $this->error)) {
+            $this->shortMessage = "Update impossible, you have to commit or stash you local file, git said:\n".implode("", $this->error);
             $status = -1;
-        } elseif ($this->in_array_match("`Automatic merge failed;`",$this->opt)) {
+        } elseif ($this->in_array_match("`Automatic merge failed;`", $this->opt)) {
             $this->shortMessage = "Some conflicts have to be fixed, reload this page to see in the editor or go to you terminal";
             $status = -2;
-        } elseif ($this->in_array_match("`Pull is not possible because you have unmerged files`",$this->error)) {
-            $this->shortMessage = "You have unmerged files, you can correct directly in this editor but you have to add and commit manually,  git said:\n".implode("",$this->error);
+        } elseif ($this->in_array_match("`Pull is not possible because you have unmerged files`", $this->error)) {
+            $this->shortMessage = "You have unmerged files, you can correct directly in this editor but you have to add and commit manually,  git said:\n".implode("", $this->error);
             $status = -3;
         }
 
@@ -129,15 +135,18 @@ class gitHandler
 
     }
 
-    private function in_array_match($regex, $array) {
-        if (!is_array($array))
+    private function in_array_match($regex, $array)
+    {
+        if (!is_array($array)) {
             trigger_error('Argument 2 must be array');
+        }
         foreach ($array as $v) {
             $match = preg_match($regex, $v);
             if ($match === 1) {
                 return true;
             }
         }
+
         return false;
     }
 }
