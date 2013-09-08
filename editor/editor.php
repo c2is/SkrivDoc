@@ -8,58 +8,33 @@ $renderer = \Skriv\Markup\Renderer::factory();
 
 switch($_POST["action"]) {
     case "init":
-        $cmd = array();
-        //$cmd[] = "git checkout master";
-        // $res = shell_exec(implode(";",$cmd));
-        $process = "git pull origin master";
-        $process = new Process($process);
-        $process->run(function ($type, $buffer) {
-            global $pError;
-            global $pOpt;
-            if ('err' === $type) {
-                $pError[] = $buffer;
-            } else {
-                $pOpt[] = $buffer;
-            }
-        });
-
+        $gHdl = new gitHandler();
+        $pullStatus = $gHdl->getPullStatus();
         /*
          * Deal with git errors
          */
-        if (in_array_match("`Your local changes to the following files would be overwritten by merge`",$pError)) {
-            $output = msg("Update impossible, you have to commit or stash you local file, git said :\n".implode("",$pError),true);
-        } elseif (in_array_match("`Automatic merge failed;`",$pOpt)) {
-            $output = msg("Some conflicts have to be fixed, reload this page to see in the editor or go to you terminal");
-        } elseif (in_array_match("`Pull is not possible because you have unmerged files`",$pError)) {
-            $output = msg("You have unmerged files, git said :\n".implode("",$pError),true);
+        if ($pullStatus < 1) {
+            $output = msg($gHdl->shortMessage,true);
         }
-
         echo $output;
-        $pError = array();
-        $pOpt = array();
+
         break;
     case "push":
         build($renderer,$_SESSION["language"]);
-        $cmd = array();
-        $cmd[] = "git checkout master";
+        $gHdl = new gitHandler();
+        $pullStatus = $gHdl->getPullStatus();
+        /*
+         * Deal with git errors
+         */
+        if ($pullStatus < 1) {
+            $output = msg($gHdl->shortMessage,true);
+            echo $output;
+            die();
+        }
+
         $cmd[] = "git add ../.";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin master";
-
-        $process = new Process(implode(";",$cmd));
-        $process->run(function ($type, $buffer) {
-            global $pError;
-            global $pOpt;
-            if ('err' === $type) {
-                $pError[] = $buffer;
-            } else {
-                $pOpt[] = $buffer;
-            }
-        });
-        var_dump($pError);
-        var_dump($pOpt);
-
-        die();
         $cmd[] = "git checkout gh-pages";
         $html = file_get_contents("../html/".$_SESSION["language"]."/index.html");
 
@@ -68,19 +43,13 @@ switch($_POST["action"]) {
         file_put_contents("../html/".$_SESSION["language"]."/index.html",$html);
 
         $cmd = array();
-        $cmd[] = "git pull";
         $cmd[] = "git add ../html/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
-        $cmd[] = "git push origin gh-pages";
+        $cmd[] = "git push --force origin gh-pages";
         $cmd[] = "git checkout master";
-        $res1 = shell_exec(implode(";",$cmd));
-        if (preg_match("`(rejected|conflict)`i",$res1)) {
-            $output = "Some problems appear : maybe conflict or fast forward, inspect your branches master and gh-pages with git";
-        }
-        else {
-            $output = "Html pushed to Github pages ";
-        }
-        echo $output;
+        shell_exec(implode(";",$cmd));
+
+        echo "Html pushed to Github pages ";
         break;
     case "convert":
         echo $renderer->render($_POST["text"]);
@@ -120,14 +89,57 @@ function msg($text,$textarea = false) {
     }
 }
 
-function in_array_match($regex, $array) {
-    if (!is_array($array))
-        trigger_error('Argument 2 must be array');
-    foreach ($array as $v) {
-        $match = preg_match($regex, $v);
-        if ($match === 1) {
-            return true;
+
+
+
+
+class gitHandler
+{
+    public $error;
+    public $opt;
+    public $shortMessage;
+
+    public function getPullStatus ($branch = "master") {
+        $status = 1;
+
+        shell_exec("git checkout master");
+        $process = "git pull origin ".$branch;
+        $process = new Process($process);
+        $process->run(function ($type, $buffer) {
+            if ('err' === $type) {
+                $this->error[] = $buffer;
+            } else {
+                $this->opt[] = $buffer;
+            }
+        });
+
+        /*
+         * Deal with git errors
+         */
+        if ($this->in_array_match("`Your local changes to the following files would be overwritten by merge`",$this->error)) {
+            $this->shortMessage = "Update impossible, you have to commit or stash you local file, git said:\n".implode("",$this->error);
+            $status = -1;
+        } elseif ($this->in_array_match("`Automatic merge failed;`",$this->opt)) {
+            $this->shortMessage = "Some conflicts have to be fixed, reload this page to see in the editor or go to you terminal";
+            $status = -2;
+        } elseif ($this->in_array_match("`Pull is not possible because you have unmerged files`",$this->error)) {
+            $this->shortMessage = "You have unmerged files, you can correct directly in this editor but you have to add and commit manually,  git said:\n".implode("",$this->error);
+            $status = -3;
         }
+
+        return $status;
+
     }
-    return false;
+
+    private function in_array_match($regex, $array) {
+        if (!is_array($array))
+            trigger_error('Argument 2 must be array');
+        foreach ($array as $v) {
+            $match = preg_match($regex, $v);
+            if ($match === 1) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

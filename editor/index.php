@@ -179,9 +179,11 @@ $ajaxUrl = "./editor.php";
     });
 
     function build(){
+        $("#ajaxMsg").html("Processing...");
         $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'build'});
     }
     function push(){
+        $("#ajaxMsg").html("Processing...");
         $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'push'});
     }
 //--></script>
