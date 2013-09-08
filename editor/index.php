@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 if (! isset($_SESSION["language"])) {
     $_SESSION["language"] = "en";
 }
@@ -82,12 +83,22 @@ $ajaxUrl = "./editor.php";
             margin: 0;
             font-size: 0.9em;
         }
-        div#ajaxMsg {
+        div#ajaxMsg
+        {
             display:block;
             float: none;
             padding: 10px 15px 10px;
             color: #AD2929;
             text-decoration: none;
+            height:30px;
+            width:600px;
+        }
+        div#ajaxMsg textarea
+        {
+            color: #AD2929;
+            text-decoration: none;
+            height:20px;
+            width:600px;
         }
         li#lang div{
             display:inline;
@@ -121,53 +132,60 @@ $ajaxUrl = "./editor.php";
 </div>
 
 <script type="text/javascript"><!--
-    function build(){
-        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'build'});
-    }
-    function push(){
-        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'push'});
-    }
-    $(window).bind(
-            "beforeunload",
-            function() {
-                $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'shutdown'});
-            }
-    )
-    $(document).ready(function() {
-        $("#<?php echo $_SESSION["language"]?>").css("color", "red");
-        $("#<?php echo $_SESSION["language"]?>").css("cursor", "auto");
 
+$(window).bind(
+        "beforeunload",
+        function() {
+            $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'shutdown'});
+        }
+)
+$(document).ready(function() {
+
+    $("#<?php echo $_SESSION["language"]?>").css("color", "red");
+    $("#<?php echo $_SESSION["language"]?>").css("cursor", "auto");
+
+    $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'init'});
+
+    var text = $("#skrivtext").val();
+    $("#skrivhtml").load('<?php echo $ajaxUrl;?>', {action: 'convert',text: text});
+});
+
+$("#en").click(
+        function() {
+            $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'setlg', language: "en"});
+            window.location.reload();
+        }
+)
+$("#fr").click(
+        function() {
+            $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'setlg', language: "fr"});
+            window.location.reload();
+        }
+)
+
+
+var timer = null;
+// met le focus sur la zone de texte
+$("#skrivtext").focus();
+// événement sur la modification de la zone de texte
+$("#skrivtext").bind("input propertychange", function() {
+    if (timer)
+        clearTimeout(timer);
+    timer = setTimeout(function() {
         var text = $("#skrivtext").val();
         $("#skrivhtml").load('<?php echo $ajaxUrl;?>', {action: 'convert',text: text});
-    });
+        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'save',text: text});
+    }, 300);
+});
 
-    $("#en").click(
-            function() {
-                $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'setlg', language: "en"});
-                window.location.reload();
-            }
-    )
-    $("#fr").click(
-            function() {
-                $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'setlg', language: "fr"});
-                window.location.reload();
-            }
-    )
-
-
-    var timer = null;
-    // met le focus sur la zone de texte
-    $("#skrivtext").focus();
-    // événement sur la modification de la zone de texte
-    $("#skrivtext").bind("input propertychange", function() {
-        if (timer)
-            clearTimeout(timer);
-        timer = setTimeout(function() {
-            var text = $("#skrivtext").val();
-            $("#skrivhtml").load('<?php echo $ajaxUrl;?>', {action: 'convert',text: text});
-            $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'save',text: text});
-        }, 300);
-    });
+function build(){
+    $("#ajaxMsg").html("Processing...");
+    $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'build'});
+}
+function push(){
+    $("#ajaxMsg").html("Processing...");
+    $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'push'});
+}
 //--></script>
 
 
