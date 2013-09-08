@@ -47,7 +47,6 @@ switch($_POST["action"]) {
         $cmd[] = "git push --force origin gh-pages";
         $cmd[] = "git checkout master";
         $status = shell_exec(implode(";",$cmd));
-        var_dump($status);
         echo "Html pushed to Github pages ";
         break;
     case "convert":
