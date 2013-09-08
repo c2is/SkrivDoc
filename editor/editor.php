@@ -46,8 +46,8 @@ switch($_POST["action"]) {
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push --force origin gh-pages";
         $cmd[] = "git checkout master";
-        shell_exec(implode(";",$cmd));
-
+        $status = shell_exec(implode(";",$cmd));
+        var_dump($status);
         echo "Html pushed to Github pages ";
         break;
     case "convert":
