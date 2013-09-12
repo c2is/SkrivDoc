@@ -160,18 +160,21 @@ class book
     const PAGE_PREFIX = "chapter";
     private $pages;
 
-    function __construct(){
+    public function __construct()
+    {
         if (! $this->getLanguage()) {
             $this->setLanguage();
         }
         $this->pages = array();
     }
 
-    function setLanguage($prefix="en") {
+    protected function setLanguage($prefix="en")
+    {
         $_SESSION["language"] = $prefix;
     }
 
-    function getLanguage() {
+    protected function getLanguage()
+    {
         if (! isset($_SESSION["language"])) {
             return false;
         } else {
@@ -180,29 +183,31 @@ class book
 
     }
 
-    function getPages() {
+    private function getPages()
+    {
         $files = array();
         $this->lsDir("../".$this->getLanguage(),$files);
         $tmp = array();
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $match = array();
 
             preg_match("`".self::ORDER_PATTERN."`", $file, $match);
-            if((int) $match[1] > 0) {
-                $tmp[(int)$match[1]] = $file;
-                $pages[(int)$match[1]] = $file;
+            if ((int) $match[1] > 0) {
+                $tmp[(int) $match[1]] = $file;
+                $pages[(int) $match[1]] = $file;
             }
         }
         $tmp = array_flip($tmp);
         sort($tmp);
-        foreach($tmp as $index=>$indexPage) {
+        foreach ($tmp as $index => $indexPage) {
             $this->pages[$index] = $pages[$indexPage];
         }
 
         return $this->pages;
     }
 
-    function addPage($numPrev) {
+    public function addPage($numPrev)
+    {
         $numNewPage = $numPrev +1;
         $pageName = self::PAGE_PREFIX.$numNewPage;
         $index  = array_search(self::PAGE_PREFIX.$numNewPage.".skriv",$this->getPages());
@@ -212,9 +217,10 @@ class book
 
     }
 
-    function delPage($numPage) {
+    public function delPage($numPage)
+    {
         $pageName = self::PAGE_PREFIX.$numPage;
-        $index  = array_search(self::PAGE_PREFIX.$numPage.".skriv",$this->getPages());
+        $index  = array_search(self::PAGE_PREFIX.$numPage.".skriv", $this->getPages());
         echo "Page to delete".$pageName;
         $this->shiftPagesBw($index);
 
@@ -223,9 +229,10 @@ class book
     /*
      * Shift pages forward
      */
-    function shiftPagesFw($startIndex) {
+    protected function shiftPagesFw($startIndex)
+    {
         $pages = $this->getPages();
-        for($i=$startIndex;$i<=count($pages)-($startIndex -1);$i++) {
+        for ($i=$startIndex; $i<=count($pages)-($startIndex -1); $i++) {
             echo "<br>".$pages[$i];
             $newName = str_replace(($i + 1).".skriv",($i + 2).".skriv",$pages[$i]);
             echo $pages[$i]." will be renamed : ".$newName;
@@ -237,9 +244,10 @@ class book
     /*
     * Shift pages backward
     */
-    function shiftPagesBw($startIndex) {
+    protected function shiftPagesBw($startIndex)
+    {
         $pages = $this->getPages();
-        for($i=$startIndex+1;$i<=count($pages)-($startIndex);$i++) {
+        for ($i=$startIndex+1; $i<=count($pages)-($startIndex); $i++) {
             echo "<br>".$pages[$i];
             $newName = str_replace(($i + 1).".skriv",($i).".skriv",$pages[$i]);
             echo $pages[$i]." will be renamed : ".$newName;
@@ -248,16 +256,16 @@ class book
 
     }
 
-    function lsDir($dirPath, &$files){
+    private function lsDir($dirPath, &$files)
+    {
         $excluded = array(".", "..");
         $buffer = opendir($dirPath);
 
-        while($file = @readdir($buffer)) {
-            if(! in_array($file,$excluded)) {
-                if(is_dir($dirPath.'/'.$file)) {
+        while ($file = @readdir($buffer)) {
+            if (! in_array($file,$excluded)) {
+                if (is_dir($dirPath.'/'.$file)) {
                     $this->lsDir($dirPath.'/'.$file, $files);
-                }
-                else{
+                } else {
                     $files[] = $file;
                 }
             }
