@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-if (! isset($_SESSION["language"])) {
-    $_SESSION["language"] = "en";
-}
+require_once("editor.php");
 
 $ajaxUrl = "./editor.php";
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,6 +14,7 @@ $ajaxUrl = "./editor.php";
     <link href="css/bootstrap-2.2.2.min.css" rel="stylesheet" media="screen" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <link href="css/style.css" rel="stylesheet" media="screen" />
+    <link href="css/hint.css" rel="stylesheet" media="screen" />
     <style type="text/css">
         html, body {
             background-color: #eaeaea;
@@ -107,6 +108,10 @@ $ajaxUrl = "./editor.php";
             text-decoration: none;
             cursor:pointer;
         }
+        .hint:after, [data-hint]:after {
+            line-height: 14px;
+            white-space: pre;
+        }
     </style>
 </head>
 <body >
@@ -116,8 +121,12 @@ $ajaxUrl = "./editor.php";
             <a class="brand" href="/">BigFoot Documentation</a>
             <ul class="nav">
                 <li id="lang"><div id="en">EN</div>|<div id="fr">FR</div></li>
-                <li><a href="#_" onclick="build();">Build Html</a></li>
-                <li><a href="#_" onclick="push();">Commit and push</a></li>
+                <li class="hint-bottom hint--warning"
+data-hint="By clicking here:
+- *.skriv files will be added, commited and pushed to you project master branch
+- corresponding html files will be commited and pushed to you project gh-pages branch">
+                    <a href="#_" onclick="push();">Commit and push</a>
+                </li>
                 <li><a href="http://markup.skriv.org/language/syntax" target="_blank">Srkiv doc</a></li>
                 <li><div id="ajaxMsg"></div></li>
             </ul>

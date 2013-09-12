@@ -6,6 +6,10 @@ session_start();
 error_reporting(E_ALL ^E_NOTICE);
 require_once('../vendor/autoload.php');
 use Symfony\Component\Process\Process;
+
+$book = new book();
+$book->delPage(2);
+
 // creation of the renderer object
 $renderer = \Skriv\Markup\Renderer::factory();
 
@@ -23,7 +27,7 @@ switch($_POST["action"]) {
 
         break;
     case "push":
-        build($renderer, $_SESSION["language"]);
+        build($renderer, $book->getLanguage());
         $gHdl = new gitHandler();
         $pullStatus = $gHdl->getPullStatus();
         /*
@@ -39,11 +43,11 @@ switch($_POST["action"]) {
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin master";
         $cmd[] = "git checkout gh-pages";
-        $html = file_get_contents("../html/".$_SESSION["language"]."/index.html");
+        $html = file_get_contents("../html/".$book->getLanguage()."/index.html");
 
         $res = shell_exec(implode(";", $cmd));
 
-        file_put_contents("../html/".$_SESSION["language"]."/index.html", $html);
+        file_put_contents("../html/".$book->getLanguage()."/index.html", $html);
         $cmd = array();
         $cmd[] = "git add ../html/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
@@ -62,16 +66,15 @@ switch($_POST["action"]) {
         shell_exec("kill ".$pid[0]);
         break;
     case "setlg":
-        $_SESSION["language"] = $_POST["language"];
-        echo "Setted language in ".$_SESSION["language"];
+        $book->setLanguage($_POST["language"]);
         break;
     case "save":
-        file_put_contents("../".$_SESSION["language"]."/doc.skriv", $_POST["text"]);
-        echo "Content saved into directory ".$_SESSION["language"]."/";
+        file_put_contents("../".$book->getLanguage()."/doc.skriv", $_POST["text"]);
+        echo "Content saved into directory ".$book->getLanguage()."/";
         break;
     case "build":
-        build($renderer, $_SESSION["language"]);
-        echo "Files generated into directory html/".$_SESSION["language"]."/";
+        build($renderer, $book->getLanguage());
+        echo "Files generated into directory html/".$book->getLanguage()."/";
         break;
 }
 
@@ -149,4 +152,118 @@ class gitHandler
 
         return false;
     }
+}
+
+class book
+{
+    const ORDER_PATTERN = "([0-9]*)\.skriv";
+    const PAGE_PREFIX = "chapter";
+    private $pages;
+
+    function __construct(){
+        if (! $this->getLanguage()) {
+            $this->setLanguage();
+        }
+        $this->pages = array();
+    }
+
+    function setLanguage($prefix="en") {
+        $_SESSION["language"] = $prefix;
+    }
+
+    function getLanguage() {
+        if (! isset($_SESSION["language"])) {
+            return false;
+        } else {
+            return $_SESSION["language"];
+        }
+
+    }
+
+    function getPages() {
+        $files = array();
+        $this->lsDir("../".$this->getLanguage(),$files);
+        $tmp = array();
+        foreach($files as $file) {
+            $match = array();
+
+            preg_match("`".self::ORDER_PATTERN."`", $file, $match);
+            if((int) $match[1] > 0) {
+                $tmp[(int)$match[1]] = $file;
+                $pages[(int)$match[1]] = $file;
+            }
+        }
+        $tmp = array_flip($tmp);
+        sort($tmp);
+        foreach($tmp as $index=>$indexPage) {
+            $this->pages[$index] = $pages[$indexPage];
+        }
+
+        return $this->pages;
+    }
+
+    function addPage($numPrev) {
+        $numNewPage = $numPrev +1;
+        $pageName = self::PAGE_PREFIX.$numNewPage;
+        $index  = array_search(self::PAGE_PREFIX.$numNewPage.".skriv",$this->getPages());
+        echo "New page name".$pageName;
+        $this->shiftPagesFw($index);
+
+
+    }
+
+    function delPage($numPage) {
+        $pageName = self::PAGE_PREFIX.$numPage;
+        $index  = array_search(self::PAGE_PREFIX.$numPage.".skriv",$this->getPages());
+        echo "Page to delete".$pageName;
+        $this->shiftPagesBw($index);
+
+
+    }
+    /*
+     * Shift pages forward
+     */
+    function shiftPagesFw($startIndex) {
+        $pages = $this->getPages();
+        for($i=$startIndex;$i<=count($pages)-($startIndex -1);$i++) {
+            echo "<br>".$pages[$i];
+            $newName = str_replace(($i + 1).".skriv",($i + 2).".skriv",$pages[$i]);
+            echo $pages[$i]." will be renamed : ".$newName;
+
+        }
+
+    }
+
+    /*
+    * Shift pages backward
+    */
+    function shiftPagesBw($startIndex) {
+        $pages = $this->getPages();
+        for($i=$startIndex+1;$i<=count($pages)-($startIndex);$i++) {
+            echo "<br>".$pages[$i];
+            $newName = str_replace(($i + 1).".skriv",($i).".skriv",$pages[$i]);
+            echo $pages[$i]." will be renamed : ".$newName;
+
+        }
+
+    }
+
+    function lsDir($dirPath, &$files){
+        $excluded = array(".", "..");
+        $buffer = opendir($dirPath);
+
+        while($file = @readdir($buffer)) {
+            if(! in_array($file,$excluded)) {
+                if(is_dir($dirPath.'/'.$file)) {
+                    $this->lsDir($dirPath.'/'.$file, $files);
+                }
+                else{
+                    $files[] = $file;
+                }
+            }
+
+        }
+        closedir($buffer);
+    }
+
 }
