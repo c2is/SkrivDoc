@@ -168,12 +168,12 @@ class book
         $this->pages = array();
     }
 
-    protected function setLanguage($prefix="en")
+    public function setLanguage($prefix="en")
     {
         $_SESSION["language"] = $prefix;
     }
 
-    protected function getLanguage()
+    public function getLanguage()
     {
         if (! isset($_SESSION["language"])) {
             return false;
