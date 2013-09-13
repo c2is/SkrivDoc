@@ -225,7 +225,6 @@ data-hint="By clicking here:
         if(confirm("Do you really want to delete the current page <?php echo $book->getCurrentPage(); ?>")) {
             $("#ajaxMsg").html("Processing...");
             $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'del'});
-            $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'prev'});
             window.location.reload();
         }
 

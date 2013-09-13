@@ -248,6 +248,7 @@ class book
 
     private function getPages()
     {
+        $this->pages = array();
         $files = array();
         $this->lsDir("../".$this->getLanguage(),$files);
         $tmp = array();
@@ -312,6 +313,13 @@ class book
 
         unlink("../".$this->getLanguage()."/".$pageName);
         $this->shiftPagesBw($indexCurrent + 1,$pages);
+
+        if (in_array($pageName,$this->getPages())) {
+            $this->setCurrentPage($pageName);
+        } else {
+            $this->setCurrentPage($pages[$indexCurrent -1]);
+        }
+
 
     }
 
