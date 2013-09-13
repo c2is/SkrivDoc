@@ -1,7 +1,5 @@
 <?php
-/*
- * Ajax handler
- */
+
 session_start();
 error_reporting(E_ALL ^E_NOTICE);
 require_once('../vendor/autoload.php');
@@ -12,6 +10,10 @@ $book = new book();
 // creation of the renderer object
 $renderer = \Skriv\Markup\Renderer::factory();
 
+
+/*
+ * Ajax handler
+ */
 switch($_POST["action"]) {
     case "init":
         $output = "Now editing ".$book->getCurrentPage();
@@ -23,6 +25,7 @@ switch($_POST["action"]) {
         if ($_SESSION["initCheck"] <= $expireNum) {
             $gHdl = new gitHandler();
             $pullStatus = $gHdl->getPullStatus();
+            $_SESSION["initCheck"] = time();
             /*
              * Deal with git errors
              */
@@ -75,6 +78,12 @@ switch($_POST["action"]) {
         break;
     case "setlg":
         $book->setLanguage($_POST["language"]);
+        break;
+    case "loadPage":
+        echo file_get_contents("../".$book->getLanguage()."/".$book->getCurrentPage());
+        break;
+    case "loadConverted":
+        echo $renderer->render(file_get_contents("../".$book->getLanguage()."/".$book->getCurrentPage()));
         break;
     case "save":
         file_put_contents("../".$book->getLanguage()."/".$book->getCurrentPage(), $_POST["text"]);
@@ -300,28 +309,24 @@ class book
         $pages = $this->getPages();
         $indexCurrent  = array_search($this->getCurrentPage(), $pages);
         $pageName = $pages[$indexCurrent];
-        if ($pageName == "") {
-            echo $this->getCurrentPage();
-        } else {
-            unlink("../".$this->getLanguage()."/".$pageName);
-            $this->shiftPagesBw($indexCurrent + 1,$pages);
-        }
 
+        unlink("../".$this->getLanguage()."/".$pageName);
+        $this->shiftPagesBw($indexCurrent + 1,$pages);
 
     }
-
 
     /*
     * Shift pages backward
     */
     protected function shiftPagesBw($startIndex,$pages)
     {
-        for ($i = $startIndex ; $i <= count($pages) - ($startIndex -1);$i++) {
-            preg_match("`".self::ORDER_PATTERN."`", $pages[$i], $match);
-            $newName = self::PAGE_PREFIX.($match[1] - 1).".skriv";
-            rename("../".$this->getLanguage()."/".$pages[$i], "../".$this->getLanguage()."/".$newName);
+        foreach ($pages as $index=>$page) {
+            if ($index >= $startIndex) {
+                preg_match("`".self::ORDER_PATTERN."`", $page, $match);
+                $newName = self::PAGE_PREFIX.($match[1] - 1).".skriv";
+                rename("../".$this->getLanguage()."/".$page, "../".$this->getLanguage()."/".$newName);
+            }
         }
-
     }
 
     private function lsDir($dirPath, &$files)

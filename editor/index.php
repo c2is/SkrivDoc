@@ -152,7 +152,7 @@ data-hint="By clicking here:
     </div>
 </div>
 <div id="body-content">
-    <textarea id="skrivtext"><?php echo file_get_contents("../".$_SESSION["language"]."/".$book->getCurrentPage());?></textarea>
+    <textarea id="skrivtext"></textarea>
     <div id="skrivhtml">
     </div>
 </div>
@@ -172,8 +172,9 @@ data-hint="By clicking here:
 
         $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'init'});
 
-        var text = $("#skrivtext").val();
-        $("#skrivhtml").load('<?php echo $ajaxUrl;?>', {action: 'convert',text: text});
+
+        $("#skrivtext").load('<?php echo $ajaxUrl;?>', {action: 'loadPage'});
+        $("#skrivhtml").load('<?php echo $ajaxUrl;?>', {action: 'loadConverted'});
     });
 
     $("#en").click(
@@ -217,10 +218,17 @@ data-hint="By clicking here:
     function add(){
         $("#ajaxMsg").html("Processing...");
         $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'add'});
+        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'next'});
+        window.location.reload();
     }
     function del(){
-        $("#ajaxMsg").html("Processing...");
-        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'del'});
+        if(confirm("Do you really want to delete the current page <?php echo $book->getCurrentPage(); ?>")) {
+            $("#ajaxMsg").html("Processing...");
+            $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'del'});
+            $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'prev'});
+            window.location.reload();
+        }
+
     }
     function build(){
         $("#ajaxMsg").html("Processing...");
