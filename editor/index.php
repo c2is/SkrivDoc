@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 require_once("editor.php");
 
 $ajaxUrl = "./editor.php";
@@ -120,7 +118,26 @@ $ajaxUrl = "./editor.php";
         <div class="container-fluid">
             <a class="brand" href="/">BigFoot Documentation</a>
             <ul class="nav">
-                <li id="lang"><div id="en">EN</div>|<div id="fr">FR</div></li>
+                <li id="lang"><div id="en">EN</div>|<div id="fr">FR</div>
+
+                </li>
+                <li class="hint-bottom hint--warning"
+                    data-hint="Previous page">
+                    <a href="#_" onclick="prev();"><</a>
+                </li>
+                <li class="hint-bottom hint--warning"
+                    data-hint="Next page">
+                    <a href="#_" onclick="next();">></a>
+                </li>
+                <li class="hint-bottom hint--warning"
+                    data-hint="By clicking here you will add a new page after this one">
+
+                    <a href="#_" onclick="add();">Add</a>
+                </li>
+                <li class="hint-bottom hint--warning"
+                    data-hint="By clicking here you will delete this page">
+                    <a href="#_" onclick="del();">Del</a>
+                </li>
                 <li class="hint-bottom hint--warning"
 data-hint="By clicking here:
 - *.skriv files will be added, commited and pushed to you project master branch
@@ -135,7 +152,7 @@ data-hint="By clicking here:
     </div>
 </div>
 <div id="body-content">
-    <textarea id="skrivtext"><?php echo file_get_contents("../".$_SESSION["language"]."/doc.skriv");?></textarea>
+    <textarea id="skrivtext"><?php echo file_get_contents("../".$_SESSION["language"]."/".$book->getCurrentPage());?></textarea>
     <div id="skrivhtml">
     </div>
 </div>
@@ -187,6 +204,24 @@ data-hint="By clicking here:
         }, 300);
     });
 
+    function prev(){
+        $("#ajaxMsg").html("Processing...");
+        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'prev'});
+        window.location.reload();
+    }
+    function next(){
+        $("#ajaxMsg").html("Processing...");
+        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'next'});
+        window.location.reload();
+    }
+    function add(){
+        $("#ajaxMsg").html("Processing...");
+        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'add'});
+    }
+    function del(){
+        $("#ajaxMsg").html("Processing...");
+        $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'del'});
+    }
     function build(){
         $("#ajaxMsg").html("Processing...");
         $("#ajaxMsg").load('<?php echo $ajaxUrl;?>', {action: 'build'});
