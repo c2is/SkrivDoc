@@ -209,6 +209,9 @@ class book
             $this->setLanguage();
         }
         if (! isset($_SESSION["currentPage"])) {
+            if (! file_exists("../".$this->getLanguage()."/".self::PAGE_PREFIX."1.skriv")) {
+                file_put_contents("../".$this->getLanguage()."/".self::PAGE_PREFIX."1.skriv","");
+            }
             $this->setCurrentPage(self::PAGE_PREFIX."1.skriv");
         } else {
             $this->currentPage =  $_SESSION["currentPage"];
@@ -230,6 +233,7 @@ class book
 
     public function setLanguage($prefix="en")
     {
+        unset($_SESSION["currentPage"]);
         $_SESSION["language"] = $prefix;
     }
     /*
