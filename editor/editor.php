@@ -57,11 +57,17 @@ switch($_POST["action"]) {
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push origin master";
         $cmd[] = "git checkout gh-pages";
-        $html = file_get_contents("../html/".$book->getLanguage()."/index.html");
+        $language = $book->getLanguage();
+        foreach ($book->getPages() as $page) {
+            $html[$page] = file_get_contents("../html/".$language."/".getHtmlPageName($page));
+        }
 
         $res = shell_exec(implode(";", $cmd));
 
-        file_put_contents("../html/".$book->getLanguage()."/index.html", $html);
+        foreach ($html as $content) {
+            file_put_contents("../html/".$language."/".getHtmlPageName($page), $content);
+        }
+
         $cmd = array();
         $cmd[] = "git add ../html/. ";
         $cmd[] = "git commit -m'Auto commit from doc editor'";
