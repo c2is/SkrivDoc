@@ -139,12 +139,16 @@ $ajaxUrl = "./editor.php";
                     <a href="#_" onclick="del();">Del</a>
                 </li>
                 <li class="hint-bottom hint--warning"
+                    data-hint="By clicking here you will delete this page">
+                    <a href="../html/<?php echo $book->getLanguage(); ?>/chapter1.html" onclick="build();" target="_blank">View</a>
+                </li>
+                <li class="hint-bottom hint--warning"
 data-hint="By clicking here:
 - *.skriv files will be added, commited and pushed to you project master branch
 - corresponding html files will be commited and pushed to you project gh-pages branch">
                     <a href="#_" onclick="push();">Commit and push</a>
                 </li>
-                <li><a href="http://markup.skriv.org/language/syntax" target="_blank">Srkiv doc</a></li>
+                <li><a href="http://markup.skriv.org/language/syntax" target="_blank">?</a></li>
                 <li><div id="ajaxMsg"></div></li>
             </ul>
 

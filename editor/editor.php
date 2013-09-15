@@ -10,7 +10,6 @@ $book = new book();
 // creation of the renderer object
 $renderer = \Skriv\Markup\Renderer::factory();
 
-
 /*
  * Ajax handler
  */
@@ -90,7 +89,7 @@ switch($_POST["action"]) {
         echo "Content saved into ".$book->getLanguage()."/".$book->getCurrentPage();
         break;
     case "build":
-        build($renderer, $book->getLanguage(),$book->getCurrentPage());
+        build($renderer,$book);
         echo "Files generated into directory html/".$book->getLanguage()."/";
         break;
     case "prev":
@@ -107,14 +106,28 @@ switch($_POST["action"]) {
         break;
 }
 
-function build($renderer,$language, $pageName)
+function build($renderer,$book)
 {
-    $tpl = file_get_contents("../html/".$language."/tpl.htm");
-    $tpl = str_replace("#{doc}#", $renderer->render(file_get_contents("../".$language."/".$pageName)), $tpl);
-    $tpl = str_replace("#{toc}#", $renderer->getToc(), $tpl);
-    file_put_contents("../html/".$language."/index.html", $tpl);
+    $language = $book->getLanguage();
+    $toc = "";
+    foreach ($book->getPages() as $page) {
+        $renderer = \Skriv\Markup\Renderer::factory();
+        $html[$page] = file_get_contents("../html/".$language."/tpl.htm");
+        $html[$page] = str_replace("#{doc}#", $renderer->render(file_get_contents("../".$language."/".$page)), $html[$page]);
+        $toc .= preg_replace("`a href=\"#([^\"]*)\"`","a href=\"".getHtmlPageName($page)."#\\1\"",$renderer->getToc());
+
+    }
+
+    foreach ($html as $skrivPage => $htmlPage) {
+        $htmlPage = str_replace("#{toc}#", $toc, $htmlPage);
+        file_put_contents("../html/".$language."/".getHtmlPageName($skrivPage),$htmlPage);
+    }
 }
 
+function getHtmlPageName ($skrivPageName)
+{
+    return str_replace(".skriv", ".html", $skrivPageName);
+}
 function msg($text,$textarea = false)
 {
     if ($textarea) {
@@ -246,7 +259,7 @@ class book
 
     }
 
-    private function getPages()
+    public function getPages()
     {
         $this->pages = array();
         $files = array();
