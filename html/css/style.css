@@ -312,7 +312,7 @@ pre.language-vim ol li {
 }
 
 #toc > ul {
-    margin-top: 1em!important;
+    // margin-top: 1em!important;
     padding: 0!important;
 }
 
