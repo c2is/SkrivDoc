@@ -64,7 +64,7 @@ switch($_POST["action"]) {
 
         $res = shell_exec(implode(";", $cmd));
 
-        foreach ($html as $content) {
+        foreach ($html as $page => $content) {
             file_put_contents("../html/".$language."/".getHtmlPageName($page), $content);
         }
 
