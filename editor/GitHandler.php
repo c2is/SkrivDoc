@@ -4,6 +4,7 @@
  * André Cianfarani <a.cianfarani@c2is.fr>
  */
 namespace SkrivEditor;
+use Symfony\Component\Process\Process;
 
 class GitHandler
 {

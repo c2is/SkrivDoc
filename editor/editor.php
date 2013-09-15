@@ -5,7 +5,7 @@ error_reporting(E_ALL ^E_NOTICE);
 require_once('../vendor/autoload.php');
 require('./GitHandler.php');
 require('./Book.php');
-use Symfony\Component\Process\Process;
+
 use SkrivEditor\Book;
 use SkrivEditor\GitHandler;
 

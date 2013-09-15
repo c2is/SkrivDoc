@@ -1,0 +1,57 @@
+How to use our framework to build easily a back office website
+
+------
+
+
+==== Generating CRUD in Bigfoot
+* Have an existing doctrine entity (in the Entity/ folder in a Bundle) by creating it yourself or using the generate:doctrine:entity command
+* use generate:bigfoot:crud. It works exactly like doctrine:generate:crud (It actually extends that command and uses its own templates to generate files)
+* A controller extending Bigfoot\Bundle\CoreBundle\Crud\CrudController will be generated in the Controller/ folder of your bundle. A FormType for your entity will also be generated if not existing.
+* The routing isn't generated! You need to add the newly created Controller in your relevent routing configuration file(s) (usually will be app/config/routing_admin.yml)
+* The menu isn't generated (yet?)! Your form and controller are generated and you edited your routing configuration and it all works if you type in the URL directly. But you need to add a menu to your CRUD screens to the Bigfoot administration interface menu.
+
+==== Adding a menu in Bigfoot
+Menu items in Bigfoot are added by Listeners. It allows any Bundle to register its own menu items  that will aggregate with other items added by other bundles.
+* Create a Listener :
+** Listeners must be located in a Listener/ folder in your bundle and listen on the "bigfoot.menu.generate" event.
+** This event uses the Bigfoot\Bundle\CoreBundle\Event\MenuEvent class to provide the menu to the listener.
+** The event is thrown by Bigfoot everytime it instanciates a menu somewhere. Simply adding your item on the given menu will add it on every menu in the administration interface. To add your item only to a specific menu, you must test the menu name.
+** On your standard, v0 Bigfoot interface, menus used are :
+*** sidebar_menu: The main menu located in the left sidebar.
+*** toolbar_menu: The menu located in the toolbar, used to display user informations and user settings links.
+*** actions_menu: Menu used in listings to allow for custom actions on the current list (add item, export ...)
+
+Example :
+[[[ php
+	Acme/Bundle/MyBundle/Listener/MenuListener.php
+	<?php
+	
+	namespace Acme\BundleMyBundle\Listener;
+	
+	use Bigfoot\Bundle\CoreBundle\Event\MenuEvent;
+	use Bigfoot\Bundle\CoreBundle\Theme\Menu\Item;
+	
+	class MenuListener
+	{
+	    /**
+	     * @param MenuEvent $event
+	     */
+	    public function onMenuGenerate(MenuEvent $event)
+	    {
+	        $menu = $event->getMenu();
+	        if ('sidebar_menu' == $menu->getName()) {
+	            $navigation = new Item('sidebar_mymenu', 'My menu');
+	            $navigation->addChild(new Item('sidebar_mymenu_mysubmenu', 'My submenu', 'my_route'));
+	            $menu->addItem($navigation);
+	        }
+	    }
+	}
+]]]
+
+[[[ yml	
+	Acme/Bundle/MyBundle/Resources/config/services.yml
+	kernel.listener.my_menu_listener:
+	        class: Acme/Bundle/MyBundle/Listener/MenuListener
+	        tags:
+	            - { name: kernel.event_listener, event: bigfoot.menu.generate, method: onMenuGenerate }
+]]]
