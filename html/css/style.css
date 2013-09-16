@@ -136,7 +136,7 @@ header h1 {
 #page h5,
 #page h6 {
     text-decoration: underline;
-    clear: both;
+    clear: left;
 }
 
 #page a.actionLink {
