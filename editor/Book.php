@@ -19,7 +19,7 @@ class Book
         }
         if (! isset($_SESSION["currentPage"])) {
             if (! file_exists("../".$this->getLanguage()."/".self::PAGE_PREFIX."1.skriv")) {
-                file_put_contents("../".$this->getLanguage()."/".self::PAGE_PREFIX."1.skriv","");
+                file_put_contents("../".$this->getLanguage()."/".self::PAGE_PREFIX."1.skriv", "");
             }
             $this->setCurrentPage(self::PAGE_PREFIX."1.skriv");
         } else {
@@ -76,7 +76,7 @@ class Book
     {
         $this->pages = array();
         $files = array();
-        $this->lsDir("../".$this->getLanguage(),$files);
+        $this->lsDir("../".$this->getLanguage(), $files);
         $tmp = array();
         foreach ($files as $file) {
             $match = array();
@@ -104,12 +104,12 @@ class Book
 
         $numNewPage = $numCurrent +1;
         $pageName = self::PAGE_PREFIX.$numNewPage.".skriv";
-        $index  = array_search($pageName,$this->getPages());
+        $index  = array_search($pageName, $this->getPages());
         if ($index !== false) {
             $this->shiftPagesFw($index);
         }
 
-        file_put_contents("../".$this->getLanguage()."/".$pageName,"");
+        file_put_contents("../".$this->getLanguage()."/".$pageName, "");
 
     }
     /*
@@ -118,7 +118,7 @@ class Book
     protected function shiftPagesFw($startIndex)
     {
         $pages = $this->getPages();
-        for ($i = count($pages)-1; $i >= $startIndex;$i--) {
+        for ($i = count($pages)-1; $i >= $startIndex; $i--) {
             preg_match("`".self::ORDER_PATTERN."`", $pages[$i], $match);
             $newName = self::PAGE_PREFIX.($match[1] + 1).".skriv";
             if ($pages[$i] == "") {
@@ -138,9 +138,9 @@ class Book
         $pageName = $pages[$indexCurrent];
 
         unlink("../".$this->getLanguage()."/".$pageName);
-        $this->shiftPagesBw($indexCurrent + 1,$pages);
+        $this->shiftPagesBw($indexCurrent + 1, $pages);
 
-        if (in_array($pageName,$this->getPages())) {
+        if (in_array($pageName, $this->getPages())) {
             $this->setCurrentPage($pageName);
         } else {
             $this->setCurrentPage($pages[$indexCurrent -1]);
@@ -154,7 +154,7 @@ class Book
     */
     protected function shiftPagesBw($startIndex,$pages)
     {
-        foreach ($pages as $index=>$page) {
+        foreach ($pages as $index => $page) {
             if ($index >= $startIndex) {
                 preg_match("`".self::ORDER_PATTERN."`", $page, $match);
                 $newName = self::PAGE_PREFIX.($match[1] - 1).".skriv";
@@ -169,7 +169,7 @@ class Book
         $buffer = opendir($dirPath);
 
         while ($file = @readdir($buffer)) {
-            if (! in_array($file,$excluded)) {
+            if (! in_array($file, $excluded)) {
                 if (is_dir($dirPath.'/'.$file)) {
                     $this->lsDir($dirPath.'/'.$file, $files);
                 } else {
