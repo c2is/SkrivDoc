@@ -124,13 +124,13 @@ function build($book)
         $renderer = \Skriv\Markup\Renderer::factory();
         $html[$page] = file_get_contents("../html/".$language."/tpl.htm");
         $html[$page] = str_replace("#{doc}#", $renderer->render(file_get_contents("../".$language."/".$page)), $html[$page]);
-        $toc .= preg_replace("`a href=\"#([^\"]*)\"`","a href=\"".getHtmlPageName($page)."#\\1\"",$renderer->getToc());
+        $toc .= preg_replace("`a href=\"#([^\"]*)\"`", "a href=\"".getHtmlPageName($page)."#\\1\"", $renderer->getToc());
 
     }
 
     foreach ($html as $skrivPage => $htmlPage) {
         $htmlPage = str_replace("#{toc}#", $toc, $htmlPage);
-        file_put_contents("../html/".$language."/".getHtmlPageName($skrivPage),$htmlPage);
+        file_put_contents("../html/".$language."/".getHtmlPageName($skrivPage), $htmlPage);
     }
 }
 
