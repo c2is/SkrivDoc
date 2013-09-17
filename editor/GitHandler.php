@@ -64,7 +64,7 @@ class GitHandler
         $cmd[] = "git commit -m'Auto commit from doc editor'";
         $cmd[] = "git push --force origin gh-pages";
         $cmd[] = "git checkout master";
-        echo shell_exec(implode(";", $cmd));
+        return shell_exec(implode(";", $cmd));
     }
 
     private function in_array_match($regex, $array)
