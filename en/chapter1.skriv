@@ -19,7 +19,16 @@ cd YourDocumentation
 git remote set-url origin git@github.com:account/YourDocumentation.git
 git submodule init
 git submodule update
+curl -sS https://getcomposer.org/installer | php
+./composer.phar install
 ]]]
+
+=== Customize a litte bit the html container template
+On the master branch edit the files :
+* html/en/tpl.htm
+* html/fr/tpl.htm
+
+Change the title, the h1 content... all relevant items for you and push your modifications;
 
 === Launch the editor
 [[[ shell
