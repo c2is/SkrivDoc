@@ -53,27 +53,21 @@ switch($_POST["action"]) {
             die();
         }
 
-        $cmd[] = "git add ../.";
-        $cmd[] = "git commit -m'Auto commit from doc editor'";
-        $cmd[] = "git push origin master";
-        $cmd[] = "git checkout gh-pages";
         $language = $book->getLanguage();
+        $html = array();
         foreach ($book->getPages() as $page) {
             $html[$page] = file_get_contents("../html/".$language."/".getHtmlPageName($page));
         }
 
-        $res = shell_exec(implode(";", $cmd));
+        $gHdl->pushMaster();
+        $gHdl->coGhPages();
 
         foreach ($html as $page => $content) {
             file_put_contents("../html/".$language."/".getHtmlPageName($page), $content);
         }
 
-        $cmd = array();
-        $cmd[] = "git add ../html/. ";
-        $cmd[] = "git commit -m'Auto commit from doc editor'";
-        $cmd[] = "git push --force origin gh-pages";
-        $cmd[] = "git checkout master";
-        $status = shell_exec(implode(";", $cmd));
+        $gHdl->pushGhPages();
+
         echo "Html pushed to Github pages ";
         break;
     case "convert":
@@ -127,7 +121,7 @@ function build($book)
         $toc .= preg_replace("`a href=\"#([^\"]*)\"`", "a href=\"".getHtmlPageName($page)."#\\1\"", $renderer->getToc());
 
     }
-
+    $html = array();
     foreach ($html as $skrivPage => $htmlPage) {
         $htmlPage = str_replace("#{toc}#", $toc, $htmlPage);
         file_put_contents("../html/".$language."/".getHtmlPageName($skrivPage), $htmlPage);

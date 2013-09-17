@@ -45,6 +45,28 @@ class GitHandler
 
     }
 
+    public function pushMaster()
+    {
+        $cmd[] = "git add ../.";
+        $cmd[] = "git commit -m'Auto commit from doc editor'";
+        $cmd[] = "git push origin master";
+        return shell_exec(implode(";", $cmd));
+    }
+
+    public function coGhPages()
+    {
+        return shell_exec("git checkout gh-pages");
+    }
+    public function pushGhPages()
+    {
+        $cmd = array();
+        $cmd[] = "git add ../html/. ";
+        $cmd[] = "git commit -m'Auto commit from doc editor'";
+        $cmd[] = "git push --force origin gh-pages";
+        $cmd[] = "git checkout master";
+        return shell_exec(implode(";", $cmd));
+    }
+
     private function in_array_match($regex, $array)
     {
         if (!is_array($array)) {
