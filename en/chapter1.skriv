@@ -1,23 +1,24 @@
-= SkrivEditor
+= SkrivDoc
+Build technical documentations easily using skriv markup language.
 
 == What is Skriv
 [[Skriv | http://markup.skriv.org]] is a markup language usefull to write some texts, especially documentations, with layout informations which can be rendered in many formats (html, pdf...).
 
-== What is SkrivEditor
-SkrivEditor is a web based skriv editor which show on the fly the html rendered and allow to automatically publish html as Github pages.
+== What is SkrivDoc
+SkrivDoc is an environment ready to use which allow you to :
+* Create, delete and edit skriv pages,
+* Render them in html on the fly,
+* Export all html contents as a simple website with table of content and publish it on github pages. 
 
-== How to use SkrivEditor
-=== Clone and set yours informations
-Clone it and you will have your new project's documentation packaged, containing :
-* the editor,
-* all your *.skriv pages,
-* all *.html pages, rendered from *.skriv pages.
+== How to use SkrivDoc
+=== Clone, set yours informations and install
 
-For example :
 [[[ shell
-git clone git@github.com:c2is/SkrivEditor.git YourDocumentation
+git clone git@github.com:c2is/SkrivDoc.git YourDocumentation
 cd YourDocumentation
 git remote set-url origin git@github.com:account/YourDocumentation.git
+git submodule init
+git submodule update
 ]]]
 
 === Launch the editor
