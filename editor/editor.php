@@ -114,6 +114,7 @@ function build($book)
 {
     $language = $book->getLanguage();
     $toc = "";
+    $html = array();
     foreach ($book->getPages() as $page) {
         $renderer = \Skriv\Markup\Renderer::factory();
         $html[$page] = file_get_contents("../html/".$language."/tpl.htm");
@@ -121,7 +122,7 @@ function build($book)
         $toc .= preg_replace("`a href=\"#([^\"]*)\"`", "a href=\"".getHtmlPageName($page)."#\\1\"", $renderer->getToc());
 
     }
-    $html = array();
+
     foreach ($html as $skrivPage => $htmlPage) {
         $htmlPage = str_replace("#{toc}#", $toc, $htmlPage);
         file_put_contents("../html/".$language."/".getHtmlPageName($skrivPage), $htmlPage);
