@@ -11,8 +11,7 @@ SkrivDoc is an environment ready to use which allow you to :
 * Export all html contents as a simple website with table of content and publish it on github pages. 
 
 == How to use SkrivDoc
-=== Clone, set yours informations and install
-
+=== Clone, set yours informations and instal
 [[[ shell
 git clone git@github.com:c2is/SkrivDoc.git YourDocumentation
 cd YourDocumentation
