@@ -20,9 +20,8 @@ git remote set-url origin git@github.com:account/YourDocumentation.git
 git submodule init
 git submodule update
 ]]]
+
 === Launch the editor
 [[[ shell
 ./edit
 ]]]
-
-s
