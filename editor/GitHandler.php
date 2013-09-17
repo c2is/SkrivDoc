@@ -70,15 +70,15 @@ class GitHandler
     private function in_array_match($regex, $array)
     {
         if (!is_array($array)) {
-            trigger_error('Argument 2 must be array');
-        }
-        foreach ($array as $v) {
-            $match = preg_match($regex, $v);
-            if ($match === 1) {
-                return true;
+            return false;
+        } else {
+            foreach ($array as $v) {
+                $match = preg_match($regex, $v);
+                if ($match === 1) {
+                    return true;
+                }
             }
         }
-
         return false;
     }
 }
