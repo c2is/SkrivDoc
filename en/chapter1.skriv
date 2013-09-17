@@ -23,5 +23,6 @@ git submodule update
 
 === Launch the editor
 [[[ shell
+
 ./edit
 ]]]
